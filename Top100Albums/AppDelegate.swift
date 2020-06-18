@@ -11,12 +11,22 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var window: UIWindow?
+       var networkManager = NetworkManager()
 
+       func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+           // Override point for customization after application launch.
+           
+           let mainController = MainViewController.init()
+           let rootNav = UINavigationController.init(rootViewController: mainController)
+           
+           window?.rootViewController = rootNav
+           window?.makeKeyAndVisible()
+            networkManager.performRequest()
+          
+           return true
+       }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        return true
-    }
 
     // MARK: UISceneSession Lifecycle
 

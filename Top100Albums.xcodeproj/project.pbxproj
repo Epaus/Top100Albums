@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		CEE703DB249C03DF00628F69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE703DA249C03DF00628F69 /* AppDelegate.swift */; };
 		CEE703DD249C03DF00628F69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE703DC249C03DF00628F69 /* SceneDelegate.swift */; };
-		CEE703DF249C03DF00628F69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE703DE249C03DF00628F69 /* ViewController.swift */; };
 		CEE703E2249C03DF00628F69 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE703E0249C03DF00628F69 /* Main.storyboard */; };
 		CEE703E4249C03E200628F69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEE703E3249C03E200628F69 /* Assets.xcassets */; };
 		CEE703E7249C03E200628F69 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE703E5249C03E200628F69 /* LaunchScreen.storyboard */; };
 		CEE703F2249C03E200628F69 /* Top100AlbumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE703F1249C03E200628F69 /* Top100AlbumsTests.swift */; };
 		CEE703FD249C03E200628F69 /* Top100AlbumsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE703FC249C03E200628F69 /* Top100AlbumsUITests.swift */; };
+		CEE7040E249C045200628F69 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7040A249C045200628F69 /* MainViewController.swift */; };
+		CEE7040F249C045200628F69 /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7040B249C045200628F69 /* AlbumModel.swift */; };
+		CEE70411249C045200628F69 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7040D249C045200628F69 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +40,6 @@
 		CEE703D7249C03DF00628F69 /* Top100Albums.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Top100Albums.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE703DA249C03DF00628F69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEE703DC249C03DF00628F69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CEE703DE249C03DF00628F69 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CEE703E1249C03DF00628F69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CEE703E3249C03E200628F69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CEE703E6249C03E200628F69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -49,6 +50,9 @@
 		CEE703F8249C03E200628F69 /* Top100AlbumsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Top100AlbumsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE703FC249C03E200628F69 /* Top100AlbumsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Top100AlbumsUITests.swift; sourceTree = "<group>"; };
 		CEE703FE249C03E200628F69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CEE7040A249C045200628F69 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		CEE7040B249C045200628F69 /* AlbumModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
+		CEE7040D249C045200628F69 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +104,10 @@
 			isa = PBXGroup;
 			children = (
 				CEE703DA249C03DF00628F69 /* AppDelegate.swift */,
+				CEE7040B249C045200628F69 /* AlbumModel.swift */,
+				CEE7040A249C045200628F69 /* MainViewController.swift */,
+				CEE7040D249C045200628F69 /* NetworkManager.swift */,
 				CEE703DC249C03DF00628F69 /* SceneDelegate.swift */,
-				CEE703DE249C03DF00628F69 /* ViewController.swift */,
 				CEE703E0249C03DF00628F69 /* Main.storyboard */,
 				CEE703E3249C03E200628F69 /* Assets.xcassets */,
 				CEE703E5249C03E200628F69 /* LaunchScreen.storyboard */,
@@ -259,9 +265,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEE703DF249C03DF00628F69 /* ViewController.swift in Sources */,
+				CEE7040F249C045200628F69 /* AlbumModel.swift in Sources */,
+				CEE70411249C045200628F69 /* NetworkManager.swift in Sources */,
 				CEE703DB249C03DF00628F69 /* AppDelegate.swift in Sources */,
 				CEE703DD249C03DF00628F69 /* SceneDelegate.swift in Sources */,
+				CEE7040E249C045200628F69 /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
