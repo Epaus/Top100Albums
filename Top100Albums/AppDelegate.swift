@@ -22,7 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            
            window?.rootViewController = rootNav
            window?.makeKeyAndVisible()
-            networkManager.performRequest()
+            networkManager.makeRequest(completion: {
+                print("in completion block")
+        })
           
            return true
        }

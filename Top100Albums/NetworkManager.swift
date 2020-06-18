@@ -53,138 +53,73 @@ class NetworkManager {
     var searchParameter = String()
     var prevSearchParameter = String()
     
-    func performRequest() {
-           guard var request = try? prepareURLRequest() else {
-               os_log("failed to prepare URLRequest")
-               return
-           }
-           var headers = [String: String]()
-            headers["Accept"] = "application/json"
-            headers["Content-Type"] = "application/json"
-           request.allHTTPHeaderFields = headers
-           request.httpMethod = method.rawValue
-        request.httpShouldHandleCookies = false
+    func makeRequest(completion: ()->Void) {
         
-           
-           let session = URLSession.shared
-           task = session.dataTask(with: request, completionHandler: { (data, response, error) in
-               if let jsonData = data {
-                if error != nil {
-                    print(error.debugDescription)
-                    return
-                }
-                
-                //self.models = self.parseJSON(jsonData) ?? [AlbumModel]()
-                self.models = self.parseOuterResponse(data: jsonData) ?? self.models
-                
-               }
-           })
-           task?.resume()
-       }
-    
-    func prepareHeaders() -> [String: String]? {
-              var headers = [String: String]()
-              headers["Accept"] = "application/json"
-             // headers["Content-Type"] = "application/json"
-              return headers
-          }
-    
-    func prepareURLRequest() throws -> URLRequest {
-           
-           var parameters = ["per_page":30, "page":1 ] as [String : Any]
+        let url = URL(string: theURL)
         
-           guard let url = prepareURLComponents()?.url else {
-               throw RequestError.invalidURL
-           }
-           
-           switch type {
-           case .body:
-               var mutableRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: timeoutInterval)
-                   mutableRequest.httpBody = try JSONSerialization.data(withJSONObject: [], options: [])
-                  
-               
-               return mutableRequest
-
-           case .path:
-               var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
-               //components.query = queryParameters(parameters)
-               let urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: timeoutInterval)
-               return urlRequest
-           }
-       }
-    
-    private func queryParameters(_ parameters: [String: Any]?, urlEncoded: Bool = false) -> String {
-        var allowedCharacterSet = CharacterSet.alphanumerics
-        allowedCharacterSet.insert(charactersIn: ".-_")
-
-        var query = ""
-        parameters?.forEach { key, value in
-            let encodedValue: String
-          
-            if let value = value as? String {
-                encodedValue = urlEncoded ? value.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? "" : value
-            } else {
-                encodedValue = "\(value)"
+        var request = URLRequest(url: url!)
+        var headers = [String: String]()
+        headers["Accept"] = "application/json"
+        request.allHTTPHeaderFields = headers
+        
+        URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+            
+                          if let jsonData = data {
+             if error != nil {
+                 print(error.debugDescription)
+                 return
+             }
+             
+             //self.models = self.parseJSON(jsonData) ?? [AlbumModel]()
+             self.models = self.parseOuterResponse(data: jsonData) ?? self.models
+             
             }
-            query = "\(query)\(key)=\(encodedValue)&"
-        }
-        
-        return query
-    }
-    
-    func prepareURLComponents() -> URLComponents? {
-           guard let apiURL = URL(string: self.theURL) else {
-                  return nil
-              }
-              var urlComponents = URLComponents(url: apiURL, resolvingAgainstBaseURL: true)
-              urlComponents?.path = endpoint
-              return urlComponents
-          }
-    
-    func parseJSON(_ data: Data) -> [AlbumModel]? {
-        var albumArray = [AlbumModel]()
-        let decoder = JSONDecoder()
-        do {
-            let results = try decoder.decode(Feed.self, from: data)
-//            for album in results {
-//                let artistName = album.artistName
-//            }
-           // let decodedData = try decoder.decode([AlbumModel].self, from: data)
-//            for data in decodedData {
-//
-//                let id = data.id
-//                let artistName = data.artistName
-//            }
             
-            return albumArray
-            
-        } catch {
-            os_log("parseJSON error %@",error.localizedDescription)
-            return nil
-        }
+        }).resume()
+        completion()
     }
+
+    
+
     
     func parseOuterResponse(data: Data) -> [AlbumModel]? {
-           var jsonResponse:Any
-           do {
-               jsonResponse = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.init(rawValue: 0))
-               let jResponse = jsonResponse as? [String: Any]
-               let imageArray = [AlbumModel]()
-               let results = jResponse?["results"]
-               
-               do {
-                   let data = try JSONSerialization.data(withJSONObject: results as Any, options: [])
-                   return self.parseJSON(data)
-                   
-               } catch  {
-                    os_log("JSONSerialization error %@",error.localizedDescription)
-               }
-               return imageArray
-               
-           } catch {
-               os_log("JSONSerialization error %@",error.localizedDescription)
-           }
-           
-           return nil
-       }
+        var jsonResponse:Any
+        var albumArray = [AlbumModel]()
+        do {
+            jsonResponse = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.init(rawValue: 0))
+            let response = jsonResponse as? [String: Any]
+            
+            let feed = response?["feed"] as? [String : Any]
+            guard let results = feed?["results"] as? [[String : Any]] else { return albumArray }
+            
+            for element in results {
+                let artistName:String = element["artistName"] as? String ?? ""
+                let artistId = element["artistId"] as? String ?? ""
+                let rDate = element["releaseDate"] as? String ?? ""
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "YYYY-mm-dd"
+                let releaseDate = dateFormatter.date(from: rDate)
+                let name = element["name"] as? String ?? ""
+                let artworkUrl100 = element["artworkUrl100"] as? String ?? ""
+                let copyright = element["copyright"] as? String ?? ""
+                let url = element["url"] as? String ?? ""
+                let genres = element["genres"]  as? [[String : Any]] ?? []
+                var genreArray = [String]()
+                for genre in genres {
+                    let genreName:String = genre["name"]  as? String ?? ""
+                    if genreName != "Music" {
+                        genreArray.append(genreName)
+                    }
+                }
+                var album = AlbumModel.init(artistName: artistName , id: artistId, releaseDate: releaseDate, name: name, url: url, genre: nil, genreStringArray: genreArray, copyright: copyright, artworkUrl100: artworkUrl100)
+                albumArray.append(album)
+                
+                print(album)
+                
+            }
+        } catch {
+            os_log("JSONSerialization error %@",error.localizedDescription)
+        }
+        return albumArray
+    }
 }

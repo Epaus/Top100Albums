@@ -14,7 +14,9 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         guard let nManager = networkManager else { return }
-        nManager.performRequest()
+        nManager.makeRequest {
+            print("in viewWillAppear - completed request")
+        }
     }
 
     override func viewDidLoad() {
