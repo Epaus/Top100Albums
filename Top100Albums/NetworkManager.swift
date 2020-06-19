@@ -70,8 +70,7 @@ class NetworkManager {
                  return
              }
              
-             //self.models = self.parseJSON(jsonData) ?? [AlbumModel]()
-             self.models = self.parseOuterResponse(data: jsonData) ?? self.models
+             self.models = self.parseResponse(data: jsonData) ?? self.models
              
             }
             
@@ -82,7 +81,7 @@ class NetworkManager {
     
 
     
-    func parseOuterResponse(data: Data) -> [AlbumModel]? {
+    func parseResponse(data: Data) -> [AlbumModel]? {
         var jsonResponse:Any
         var albumArray = [AlbumModel]()
         do {

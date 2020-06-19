@@ -17,6 +17,10 @@
 		CEE7040E249C045200628F69 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7040A249C045200628F69 /* MainViewController.swift */; };
 		CEE7040F249C045200628F69 /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7040B249C045200628F69 /* AlbumModel.swift */; };
 		CEE70411249C045200628F69 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7040D249C045200628F69 /* NetworkManager.swift */; };
+		CEE7041A249C397E00628F69 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70419249C397E00628F69 /* Constants.swift */; };
+		CEE7041D249C3EB900628F69 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7041C249C3EB900628F69 /* UIImageView.swift */; };
+		CEE7041F249C3EFB00628F69 /* Notification-Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7041E249C3EFB00628F69 /* Notification-Name.swift */; };
+		CEE70422249C443800628F69 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70421249C443800628F69 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,10 @@
 		CEE7040A249C045200628F69 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CEE7040B249C045200628F69 /* AlbumModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
 		CEE7040D249C045200628F69 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		CEE70419249C397E00628F69 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		CEE7041C249C3EB900628F69 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		CEE7041E249C3EFB00628F69 /* Notification-Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification-Name.swift"; sourceTree = "<group>"; };
+		CEE70421249C443800628F69 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,15 +111,13 @@
 		CEE703D9249C03DF00628F69 /* Top100Albums */ = {
 			isa = PBXGroup;
 			children = (
-				CEE703DA249C03DF00628F69 /* AppDelegate.swift */,
-				CEE7040B249C045200628F69 /* AlbumModel.swift */,
-				CEE7040A249C045200628F69 /* MainViewController.swift */,
-				CEE7040D249C045200628F69 /* NetworkManager.swift */,
-				CEE703DC249C03DF00628F69 /* SceneDelegate.swift */,
-				CEE703E0249C03DF00628F69 /* Main.storyboard */,
-				CEE703E3249C03E200628F69 /* Assets.xcassets */,
-				CEE703E5249C03E200628F69 /* LaunchScreen.storyboard */,
-				CEE703E8249C03E200628F69 /* Info.plist */,
+				CEE70420249C441900628F69 /* Views */,
+				CEE7041B249C3E9B00628F69 /* Extensions */,
+				CEE70418249C396700628F69 /* Constants */,
+				CEE70417249C38ED00628F69 /* ProjectFiles */,
+				CEE70416249C38CE00628F69 /* Managers */,
+				CEE70415249C38BD00628F69 /* Models */,
+				CEE70414249C389200628F69 /* Controllers */,
 			);
 			path = Top100Albums;
 			sourceTree = "<group>";
@@ -132,6 +138,68 @@
 				CEE703FE249C03E200628F69 /* Info.plist */,
 			);
 			path = Top100AlbumsUITests;
+			sourceTree = "<group>";
+		};
+		CEE70414249C389200628F69 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CEE7040A249C045200628F69 /* MainViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		CEE70415249C38BD00628F69 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CEE7040B249C045200628F69 /* AlbumModel.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		CEE70416249C38CE00628F69 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				CEE7040D249C045200628F69 /* NetworkManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		CEE70417249C38ED00628F69 /* ProjectFiles */ = {
+			isa = PBXGroup;
+			children = (
+				CEE703DA249C03DF00628F69 /* AppDelegate.swift */,
+				CEE703DC249C03DF00628F69 /* SceneDelegate.swift */,
+				CEE703E0249C03DF00628F69 /* Main.storyboard */,
+				CEE703E3249C03E200628F69 /* Assets.xcassets */,
+				CEE703E5249C03E200628F69 /* LaunchScreen.storyboard */,
+				CEE703E8249C03E200628F69 /* Info.plist */,
+			);
+			name = ProjectFiles;
+			sourceTree = "<group>";
+		};
+		CEE70418249C396700628F69 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				CEE70419249C397E00628F69 /* Constants.swift */,
+			);
+			name = Constants;
+			sourceTree = "<group>";
+		};
+		CEE7041B249C3E9B00628F69 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CEE7041C249C3EB900628F69 /* UIImageView.swift */,
+				CEE7041E249C3EFB00628F69 /* Notification-Name.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		CEE70420249C441900628F69 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CEE70421249C443800628F69 /* ActivityIndicatorView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,9 +335,13 @@
 			files = (
 				CEE7040F249C045200628F69 /* AlbumModel.swift in Sources */,
 				CEE70411249C045200628F69 /* NetworkManager.swift in Sources */,
+				CEE7041D249C3EB900628F69 /* UIImageView.swift in Sources */,
 				CEE703DB249C03DF00628F69 /* AppDelegate.swift in Sources */,
 				CEE703DD249C03DF00628F69 /* SceneDelegate.swift in Sources */,
 				CEE7040E249C045200628F69 /* MainViewController.swift in Sources */,
+				CEE70422249C443800628F69 /* ActivityIndicatorView.swift in Sources */,
+				CEE7041A249C397E00628F69 /* Constants.swift in Sources */,
+				CEE7041F249C3EFB00628F69 /* Notification-Name.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
