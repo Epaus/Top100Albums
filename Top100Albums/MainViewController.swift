@@ -9,7 +9,7 @@
 import UIKit
 
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, UINavigationBarDelegate {
     var networkManager: NetworkManager?
     var albums = [AlbumModel]()
     
@@ -30,8 +30,6 @@ class MainViewController: UIViewController {
     
      init(frame: CGRect, networkManager: NetworkManager) {
         super.init(nibName: nil, bundle: nil)
-        self.view.backgroundColor = .red
-        self.view.tintColor = .green
         self.networkManager = networkManager
     }
     
@@ -45,8 +43,15 @@ class MainViewController: UIViewController {
        getData()
     }
     
+//    override func viewWillLayoutSubviews() {
+//        setupNavigationBar()
+//        setupTableView()
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        activityIndicator.showActivityIndicator(uiView: self.view)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
         getData()
         setupNavigationBar()
@@ -59,13 +64,13 @@ class MainViewController: UIViewController {
         }
         if let nManager = self.networkManager {
             if nManager.models.count == 0 {
-                activityIndicator.showActivityIndicator(uiView: self.view)
+                //activityIndicator.showActivityIndicator(uiView: self.view)
                 nManager.makeRequest {
                     DispatchQueue.main.async(execute: {
                         print("in completion block")
                         self.albums = nManager.models
-                        self.activityIndicator.hideActivityIndicator()
                         self.tableView.reloadData()
+                        self.activityIndicator.hideActivityIndicator()
                     })
                 }
             }
@@ -73,10 +78,34 @@ class MainViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-//        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIElementSizes.screenWidth, height: UIElementSizes.navBarHeight))
-//
-//        self.view.addSubview(navBar);
-        self.navigationController?.title = "TOP 100 ALBUMS"
+        let title = "TOP 100 ALBUMS"
+        let navigationBar = UINavigationBar(frame: CGRect(x:0, y:0, width:self.view.frame.size.width, height:100))
+//        configureNavigationBar(largeTitleColor: .white, backgoundColor: .systemPink, tintColor: .blue, title: "TOP 100 ALBUMS", preferredLargeTitle: true, navigationBar: navigationBar)
+       if #available(iOS 13.0, *) {
+           let navBarAppearance = UINavigationBarAppearance()
+           navBarAppearance.configureWithOpaqueBackground()
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navBarAppearance.backgroundColor = .systemPink
+
+           navigationBar.standardAppearance = navBarAppearance
+           navigationBar.compactAppearance = navBarAppearance
+           navigationBar.scrollEdgeAppearance = navBarAppearance
+
+           navigationBar.prefersLargeTitles = true
+           navigationBar.isTranslucent = false
+        navigationBar.tintColor = .blue
+           navigationItem.title = title
+           navigationBar.items = [navigationItem]
+
+       } else {
+           // Fallback on earlier versions
+        navigationController?.navigationBar.barTintColor = .systemPink
+        navigationController?.navigationBar.tintColor = .blue
+           navigationController?.navigationBar.isTranslucent = false
+           navigationItem.title = title
+       }
+        self.view.addSubview(navigationBar)
     }
     
     func setupTableView() {
@@ -85,19 +114,15 @@ class MainViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.rowHeight = 50
         self.view.addSubview(tableView)
-        self.setConstraints()
-    }
-    
-    func setConstraints() {
-        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-        tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-        tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-        tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
+            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:UIElementSizes.navBarHeight),
+            tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
+    
     
     @objc func updateTable(notification: Notification) {
         albums = notification.object as! [AlbumModel]
