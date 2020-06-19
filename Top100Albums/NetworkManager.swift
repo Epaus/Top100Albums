@@ -39,7 +39,7 @@ class NetworkManager {
     var models:  [AlbumModel] = [] {
         didSet {
             print("models - didSet!")
-            //NotificationCenter.default.post(name: .ImageModelListUpdatedNotification, object: models )
+            NotificationCenter.default.post(name: .ModelListUpdatedNotification, object: models )
         }
     }
     static let shared = NetworkManager()

@@ -11,7 +11,7 @@ import UIKit
 
 class MainViewController: UIViewController {
     var networkManager: NetworkManager?
-    var albums: [AlbumModel]?
+    var albums = [AlbumModel]()
     
    
     var activityIndicator = ActivityIndicatorView()
@@ -36,34 +36,40 @@ class MainViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-       super.init(nibName: nil, bundle: nil)
-       print("ugh")
+        super.init(coder: coder)
     }
     
    
     
     override func viewWillAppear(_ animated: Bool) {
-        guard let nManager = networkManager else { return }
-        if nManager.models.count == 0 {
-            activityIndicator.showActivityIndicator(uiView: self.view)
-            nManager.makeRequest {
-                      print("in viewWillAppear - completed request")
-                      albums = nManager.models
-                      activityIndicator.hideActivityIndicator()
-                  }
-        } else {
-            albums = nManager.models
-        }
-      
+       getData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //activityIndicator.showActivityIndicator(uiView: self.view)
-      
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
+        getData()
         setupNavigationBar()
         setupTableView()
-        
+    }
+    
+    func getData() {
+        if networkManager == nil {
+            self.networkManager = NetworkManager()
+        }
+        if let nManager = self.networkManager {
+            if nManager.models.count == 0 {
+                activityIndicator.showActivityIndicator(uiView: self.view)
+                nManager.makeRequest {
+                    DispatchQueue.main.async(execute: {
+                        print("in completion block")
+                        self.albums = nManager.models
+                        self.activityIndicator.hideActivityIndicator()
+                        self.tableView.reloadData()
+                    })
+                }
+            }
+        }
     }
     
     func setupNavigationBar() {
@@ -86,25 +92,63 @@ class MainViewController: UIViewController {
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIElementSizes.navBarHeight),
-            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
-            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+        tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+        tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+        tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
         ])
+    }
+    
+    @objc func updateTable(notification: Notification) {
+        albums = notification.object as! [AlbumModel]
+       
+        DispatchQueue.main.async {
+            if self.albums.count == 0 {
+               // let alert = self.createAlertController(title: "No Images Found", message: "No images match your search. \nPlease try again.")
+               // self.present(alert, animated: true, completion: nil)
+                guard let nManager = self.networkManager else { return }
+                self.albums = nManager.models
+            }
+            self.tableView.reloadData()
+            self.activityIndicator.hideActivityIndicator()
+        }
     }
     
     
 }
 // MARK: UITableviewDataSource, UITableViewDelegate extension
-extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+extension MainViewController: UITableViewDataSource {
+    // MARK: - TableViewDataSource functions
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return albums?.count ?? 0
+        return albums.count ?? 0
     }
     
+
+}
+extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let model = albums[indexPath.row]
+        
+        cell.selectionStyle = .none
+        cell.textLabel?.text = model.artistName ?? "not found"
+        return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let model = self.model else { return }
+//        let askFor = model.currentCategory?.askFors?[indexPath.row] as? AskFor
+//        let suggestionModel = SuggestionModel.init(managedContext: model.managedContext)
+//        suggestionModel.currentAskFor = askFor
+//        suggestionModel.managedContext = model.managedContext
+//        let vc = SuggestionController()
+//        vc.model = suggestionModel
+//
+//        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 

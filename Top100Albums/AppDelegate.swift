@@ -18,13 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         let mainController = MainViewController(frame:CGRect.zero, networkManager: networkManager)
-        //mainController.networkManager = networkManager
         let rootNav = UINavigationController.init(rootViewController: mainController)
         window?.rootViewController = rootNav
         window?.makeKeyAndVisible()
-        networkManager.makeRequest(completion: {
-                       print("in completion block")
-               })
         
         return true
     }
