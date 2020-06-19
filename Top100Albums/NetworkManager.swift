@@ -110,7 +110,7 @@ class NetworkManager {
                         genreArray.append(genreName)
                     }
                 }
-                var album = AlbumModel.init(artistName: artistName , id: artistId, releaseDate: releaseDate, name: name, url: url, genre: nil, genreStringArray: genreArray, copyright: copyright, artworkUrl100: artworkUrl100)
+                let album = AlbumModel.init(artistName: artistName , id: artistId, releaseDate: releaseDate, name: name, url: url, genre: nil, genreStringArray: genreArray, copyright: copyright, artworkUrl100: artworkUrl100)
                 albumArray.append(album)
                 
                 print(album)

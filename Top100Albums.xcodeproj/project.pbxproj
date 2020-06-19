@@ -21,6 +21,8 @@
 		CEE7041D249C3EB900628F69 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7041C249C3EB900628F69 /* UIImageView.swift */; };
 		CEE7041F249C3EFB00628F69 /* Notification-Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7041E249C3EFB00628F69 /* Notification-Name.swift */; };
 		CEE70422249C443800628F69 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70421249C443800628F69 /* ActivityIndicatorView.swift */; };
+		CEE70424249D3AFD00628F69 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70423249D3AFD00628F69 /* UIViewController.swift */; };
+		CEE70426249D5B4800628F69 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70425249D5B4800628F69 /* ListTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		CEE7041C249C3EB900628F69 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		CEE7041E249C3EFB00628F69 /* Notification-Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification-Name.swift"; sourceTree = "<group>"; };
 		CEE70421249C443800628F69 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
+		CEE70423249D3AFD00628F69 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		CEE70425249D5B4800628F69 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +194,7 @@
 			children = (
 				CEE7041C249C3EB900628F69 /* UIImageView.swift */,
 				CEE7041E249C3EFB00628F69 /* Notification-Name.swift */,
+				CEE70423249D3AFD00628F69 /* UIViewController.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -198,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				CEE70421249C443800628F69 /* ActivityIndicatorView.swift */,
+				CEE70425249D5B4800628F69 /* ListTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -333,10 +339,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEE70426249D5B4800628F69 /* ListTableViewCell.swift in Sources */,
 				CEE7040F249C045200628F69 /* AlbumModel.swift in Sources */,
 				CEE70411249C045200628F69 /* NetworkManager.swift in Sources */,
 				CEE7041D249C3EB900628F69 /* UIImageView.swift in Sources */,
 				CEE703DB249C03DF00628F69 /* AppDelegate.swift in Sources */,
+				CEE70424249D3AFD00628F69 /* UIViewController.swift in Sources */,
 				CEE703DD249C03DF00628F69 /* SceneDelegate.swift in Sources */,
 				CEE7040E249C045200628F69 /* MainViewController.swift in Sources */,
 				CEE70422249C443800628F69 /* ActivityIndicatorView.swift in Sources */,

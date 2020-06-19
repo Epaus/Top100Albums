@@ -13,7 +13,6 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     var networkManager: NetworkManager?
     var albums = [AlbumModel]()
     
-   
     var activityIndicator = ActivityIndicatorView()
     
     var tableView: UITableView = {
@@ -28,7 +27,7 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         super.init(nibName: nil, bundle: nil)
     }
     
-     init(frame: CGRect, networkManager: NetworkManager) {
+    init(frame: CGRect, networkManager: NetworkManager) {
         super.init(nibName: nil, bundle: nil)
         self.networkManager = networkManager
     }
@@ -37,23 +36,15 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         super.init(coder: coder)
     }
     
-   
-    
     override func viewWillAppear(_ animated: Bool) {
-       getData()
+        getData()
     }
-    
-//    override func viewWillLayoutSubviews() {
-//        setupNavigationBar()
-//        setupTableView()
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = .tertiarySystemBackground
         activityIndicator.showActivityIndicator(uiView: self.view)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
-        getData()
         setupNavigationBar()
         setupTableView()
     }
@@ -78,41 +69,16 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func setupNavigationBar() {
-        let title = "TOP 100 ALBUMS"
-        let navigationBar = UINavigationBar(frame: CGRect(x:0, y:0, width:self.view.frame.size.width, height:100))
-//        configureNavigationBar(largeTitleColor: .white, backgoundColor: .systemPink, tintColor: .blue, title: "TOP 100 ALBUMS", preferredLargeTitle: true, navigationBar: navigationBar)
-       if #available(iOS 13.0, *) {
-           let navBarAppearance = UINavigationBarAppearance()
-           navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navBarAppearance.backgroundColor = .systemPink
-
-           navigationBar.standardAppearance = navBarAppearance
-           navigationBar.compactAppearance = navBarAppearance
-           navigationBar.scrollEdgeAppearance = navBarAppearance
-
-           navigationBar.prefersLargeTitles = true
-           navigationBar.isTranslucent = false
-        navigationBar.tintColor = .blue
-           navigationItem.title = title
-           navigationBar.items = [navigationItem]
-
-       } else {
-           // Fallback on earlier versions
-        navigationController?.navigationBar.barTintColor = .systemPink
-        navigationController?.navigationBar.tintColor = .blue
-           navigationController?.navigationBar.isTranslucent = false
-           navigationItem.title = title
-       }
+        let navigationBar = UINavigationBar(frame: CGRect(x:0, y:0, width:self.view.frame.size.width, height:UIElementSizes.navBarHeight))
+        configureNavigationBar(largeTitleColor: .white, backgoundColor: .systemPink, tintColor: .blue, title: ConstantText.listTitle, preferredLargeTitle: true, navigationBar: navigationBar)
         self.view.addSubview(navigationBar)
     }
     
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.rowHeight = 50
+        tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ConstantText.cellId)
+        tableView.estimatedRowHeight = 100
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -123,14 +89,11 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         ])
     }
     
-    
     @objc func updateTable(notification: Notification) {
         albums = notification.object as! [AlbumModel]
-       
+        
         DispatchQueue.main.async {
             if self.albums.count == 0 {
-               // let alert = self.createAlertController(title: "No Images Found", message: "No images match your search. \nPlease try again.")
-               // self.present(alert, animated: true, completion: nil)
                 guard let nManager = self.networkManager else { return }
                 self.albums = nManager.models
             }
@@ -138,7 +101,6 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
             self.activityIndicator.hideActivityIndicator()
         }
     }
-    
     
 }
 // MARK: UITableviewDataSource, UITableViewDelegate extension
@@ -149,31 +111,30 @@ extension MainViewController: UITableViewDataSource {
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return albums.count ?? 0
+        return albums.count 
     }
     
 
 }
 extension MainViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100;
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+       
         let model = albums[indexPath.row]
+        let acell: ListTableViewCell = {
+            return ListTableViewCell.init(style: .default, reuseIdentifier: ConstantText.cellId, model: model)
+        }()
+        acell.thumbnailImageView.getImage(name: model.artworkUrl100 ?? "")
         
-        cell.selectionStyle = .none
-        cell.textLabel?.text = model.artistName ?? "not found"
-        return cell
+        return acell 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let model = self.model else { return }
-//        let askFor = model.currentCategory?.askFors?[indexPath.row] as? AskFor
-//        let suggestionModel = SuggestionModel.init(managedContext: model.managedContext)
-//        suggestionModel.currentAskFor = askFor
-//        suggestionModel.managedContext = model.managedContext
-//        let vc = SuggestionController()
-//        vc.model = suggestionModel
-//
-//        navigationController?.pushViewController(vc, animated: true)
+        
     }
 }
 
