@@ -76,6 +76,11 @@ class DetailViewController: UIViewController {
         return button
     }()
     
+    lazy var bufferView: UIView = {
+        var view = UIView()
+        return view
+    }()
+    
     var model: AlbumModel
     
     init(model: AlbumModel) {
@@ -103,33 +108,37 @@ class DetailViewController: UIViewController {
     
     func configureScrollView() {
         self.view.addSubview(scrollView)
+        
+        scrollView.bounces = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-                   scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:UIElementSizes.navBarHeight),
-                   scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+                   scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: UIElementSizes.navBarHeight/2),
+                   scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 20),
                    
-                   scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-                   scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0)
+                   scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: -20),
+                   scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 20)
                ])
+        
         scrollView.addSubview(stackView)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 10).isActive = true;
+        stackView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 20).isActive = true;
         stackView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true;
         stackView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor, constant: -10).isActive = true;
-        stackView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -20).isActive = true;
+        stackView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: 0).isActive = true;
                
         //constrain width of stack view to width of self.view, NOT scroll view
-        self.stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -10).isActive = true;
+        self.stackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: 0).isActive = true;
     }
     
     func configureStackView() {
-        self.stackView = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 20)
+        self.stackView = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
         configureImageStack()
         configureAlbumNameLabel()
         configureArtistStack()
         configureGenreStack()
         configureReleaseDateStack()
         configureLinkButton()
+        configureBufferView()
         
         
         stackView.addArrangedSubview(imageStack)
@@ -138,8 +147,10 @@ class DetailViewController: UIViewController {
         stackView.addArrangedSubview(genreStack)
         stackView.addArrangedSubview(releaseDateStack)
         stackView.addArrangedSubview(linkButton)
+        stackView.addArrangedSubview(bufferView)
         NSLayoutConstraint.activate([
-            linkButton.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -20)
+            linkButton.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -20),
+            imageStack.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -10),
                    ])
     }
     
@@ -151,9 +162,14 @@ class DetailViewController: UIViewController {
         textAlignment: .center,
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
+        copyrightLabel.translatesAutoresizingMaskIntoConstraints = false
         imageStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
         imageStack.addArrangedSubview(imageView)
         imageStack.addArrangedSubview(copyrightLabel)
+        imageStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        copyrightLabel.widthAnchor.constraint(equalTo: imageStack.widthAnchor, constant: -20).isActive = true;
+        
     }
     
     func configureAlbumNameLabel() {
@@ -177,7 +193,7 @@ class DetailViewController: UIViewController {
            numberOfLines: 0,
            lineBreakMode: .byWordWrapping)
 
-        artistStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
+        artistStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
         artistStack.addArrangedSubview(artistLabel)
         artistStack.addArrangedSubview(artistNameLabel)
        }
@@ -195,7 +211,7 @@ class DetailViewController: UIViewController {
                                                   textAlignment: .center,
                                                   numberOfLines: 0,
                                                   lineBreakMode: .byWordWrapping)
-       genreStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
+       genreStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
        genreStack.addArrangedSubview(genreLabel)
        genreStack.addArrangedSubview(genresLabel)
     }
@@ -217,7 +233,7 @@ class DetailViewController: UIViewController {
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
        
-        releaseDateStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
+        releaseDateStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
         releaseDateStack.addArrangedSubview(releaseLabel)
         releaseDateStack.addArrangedSubview(releaseDateLabel)
     }
@@ -229,5 +245,11 @@ class DetailViewController: UIViewController {
         let cornerRadius: CGFloat = 5
         let backgroundColor =  UIColor.systemRed
         linkButton = UIViewController.createButton(button: linkButton, text: "iTunes", font: UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)), titleColor: .white, backgroundColor: backgroundColor, borderWidth: borderWidth, borderColor: borderColor, cornerRadius: cornerRadius, textAlignment: .center)
+    }
+    
+    func configureBufferView() {
+        bufferView = UIView()
+        bufferView.backgroundColor = .clear
+        bufferView.translatesAutoresizingMaskIntoConstraints = false
     }
 }
