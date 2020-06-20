@@ -38,7 +38,6 @@ class NetworkManager {
     var running: Bool = false
     var models:  [AlbumModel] = [] {
         didSet {
-            print("models - didSet!")
             NotificationCenter.default.post(name: .ModelListUpdatedNotification, object: models )
         }
     }
@@ -55,9 +54,8 @@ class NetworkManager {
     
     func makeRequest(completion: ()->Void) {
         
-        let url = URL(string: theURL)
-        
-        var request = URLRequest(url: url!)
+        guard let url = URL(string: theURL) else { return }
+        var request = URLRequest(url: url)
         var headers = [String: String]()
         headers["Accept"] = "application/json"
         request.allHTTPHeaderFields = headers
@@ -71,16 +69,11 @@ class NetworkManager {
              }
              
              self.models = self.parseResponse(data: jsonData) ?? self.models
-             
             }
-            
         }).resume()
         completion()
     }
 
-    
-
-    
     func parseResponse(data: Data) -> [AlbumModel]? {
         var jsonResponse:Any
         var albumArray = [AlbumModel]()
@@ -112,9 +105,6 @@ class NetworkManager {
                 }
                 let album = AlbumModel.init(artistName: artistName , id: artistId, releaseDate: releaseDate, name: name, url: url, genre: nil, genreStringArray: genreArray, copyright: copyright, artworkUrl100: artworkUrl100)
                 albumArray.append(album)
-                
-                print(album)
-                
             }
         } catch {
             os_log("JSONSerialization error %@",error.localizedDescription)

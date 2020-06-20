@@ -10,9 +10,40 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
+    lazy var stackView: UIStackView = {
+        let sView = UIStackView()
+        return sView
+    }()
+    
     lazy var imageView: UIImageView = {
-        var iView = UIImageView()
-        return iView
+           var iView = UIImageView()
+        iView.alignmentRect(forFrame: CGRect(x:0,y:0, width:self.view.frame.size.width * 0.75,height:self.view.frame.size.width * 0.75))
+           return iView
+       }()
+    
+    lazy var imageStack: UIStackView = {
+        let stackView = UIStackView()
+        return stackView
+       }()
+    
+    lazy var artistStack: UIStackView = {
+       let stackView = UIStackView()
+        return stackView
+    }()
+    
+    lazy var genreStack: UIStackView = {
+        let stackView = UIStackView()
+              return stackView
+    }()
+    
+    lazy var releaseDateStack: UIStackView = {
+        let stackView = UIStackView()
+              return stackView
     }()
     
     lazy var copyrightLabel: UILabel = {
@@ -40,6 +71,11 @@ class DetailViewController: UIViewController {
            return label
        }()
     
+    lazy var linkButton: UIButton = {
+        var button = UIButton()
+        return button
+    }()
+    
     var model: AlbumModel
     
     init(model: AlbumModel) {
@@ -61,47 +97,59 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = UIColor.systemGray6
-        configureImage()
-        configureCopyright()
+        configureStackView()
+        configureScrollView()
+    }
+    
+    func configureScrollView() {
+        self.view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+                   scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:UIElementSizes.navBarHeight),
+                   scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+                   
+                   scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+                   scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0)
+               ])
+        scrollView.addSubview(stackView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 10).isActive = true;
+        stackView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true;
+        stackView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor, constant: -10).isActive = true;
+        stackView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -20).isActive = true;
+               
+        //constrain width of stack view to width of self.view, NOT scroll view
+        self.stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -10).isActive = true;
+    }
+    
+    func configureStackView() {
+        self.stackView = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 20)
+        configureImageStack()
         configureAlbumNameLabel()
-        configureArtistNameLabel()
-        configureGenreLabel()
-        configureReleaseDateLabel()
+        configureArtistStack()
+        configureGenreStack()
+        configureReleaseDateStack()
+        configureLinkButton()
         
-        
-        
-        
+        stackView.addArrangedSubview(imageStack)
+        stackView.addArrangedSubview(albumNameLabel)
+        stackView.addArrangedSubview(artistStack)
+        stackView.addArrangedSubview(genreStack)
+        stackView.addArrangedSubview(releaseDateStack)
+        stackView.addArrangedSubview(linkButton)
     }
     
-    func configureImage() {
-        imageView = UIImageView()
-        self.view.addSubview(imageView)
+    func configureImageStack() {
         imageView.getImage(name: model.artworkUrl100 ?? "")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:UIElementSizes.navBarHeight/2),
-            imageView.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.67),
-            imageView.heightAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.67),
-            imageView.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor),
-        ])
-    }
-    
-    func configureCopyright() {
-        
         copyrightLabel = UIViewController.createLabel(label: copyrightLabel, text: model.copyright ?? "",
-                                                      font:  UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)),
-                                                      adjustFontSize: true,
-                                                      textAlignment: .center,
-                                                      numberOfLines: 0,
-                                                      lineBreakMode: .byWordWrapping)
-        self.view.addSubview(copyrightLabel)
-        copyrightLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            copyrightLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -10),
-            copyrightLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-            copyrightLabel.heightAnchor.constraint(equalToConstant: 100.0),
-            copyrightLabel.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor),
-        ])
+        font:  UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 17, weight: .regular)),
+        adjustFontSize: true,
+        textAlignment: .center,
+        numberOfLines: 0,
+        lineBreakMode: .byWordWrapping)
+        imageStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
+        imageStack.addArrangedSubview(imageView)
+        imageStack.addArrangedSubview(copyrightLabel)
     }
     
     func configureAlbumNameLabel() {
@@ -110,65 +158,32 @@ class DetailViewController: UIViewController {
         textAlignment: .center,
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
-        self.view.addSubview(albumNameLabel)
-        albumNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-                   albumNameLabel.topAnchor.constraint(equalTo: copyrightLabel.bottomAnchor, constant:10),
-                   albumNameLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-                   albumNameLabel.heightAnchor.constraint(equalToConstant: 40.0),
-                   albumNameLabel.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor, constant: 0),
-               ])
-        
     }
     
-    func configureArtistNameLabel() {
-        
+    func configureArtistStack() {
         let artistLabel = UIViewController.createLabel(label: UILabel(), text: "Artist:", font:UIFontMetrics(forTextStyle: .headline).scaledFont(for: UIFont.systemFont(ofSize: 20, weight: .heavy)),
         adjustFontSize: true,
         textAlignment: .center,
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
-        self.view.addSubview(artistLabel)
-        artistLabel.translatesAutoresizingMaskIntoConstraints = false
-                  NSLayoutConstraint.activate([
-                             artistLabel.topAnchor.constraint(equalTo: albumNameLabel.bottomAnchor, constant:20),
-                             artistLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-                             artistLabel.heightAnchor.constraint(equalToConstant: 20.0),
-                             artistLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-                         ])
-        
-        
+
         artistNameLabel = UIViewController.createLabel(label: artistNameLabel, text: model.artistName ?? "", font:UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)),
            adjustFontSize: true,
            textAlignment: .center,
            numberOfLines: 0,
            lineBreakMode: .byWordWrapping)
-           self.view.addSubview(artistNameLabel)
-           artistNameLabel.translatesAutoresizingMaskIntoConstraints = false
-           NSLayoutConstraint.activate([
-                      artistNameLabel.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant:0),
-                      artistNameLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-                      artistNameLabel.heightAnchor.constraint(equalToConstant: 40.0),
-                      artistNameLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-                  ])
-           
+
+        artistStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
+        artistStack.addArrangedSubview(artistLabel)
+        artistStack.addArrangedSubview(artistNameLabel)
        }
     
-    func configureGenreLabel() {
+    func configureGenreStack() {
         let genreLabel = UIViewController.createLabel(label: UILabel(), text: "Genre:", font:UIFontMetrics(forTextStyle: .headline).scaledFont(for: UIFont.systemFont(ofSize: 20, weight: .heavy)),
                adjustFontSize: true,
                textAlignment: .center,
                numberOfLines: 0,
                lineBreakMode: .byWordWrapping)
-               self.view.addSubview(genreLabel)
-               genreLabel.translatesAutoresizingMaskIntoConstraints = false
-                         NSLayoutConstraint.activate([
-                                    genreLabel.topAnchor.constraint(equalTo: artistNameLabel.bottomAnchor, constant:20),
-                                    genreLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-                                    genreLabel.heightAnchor.constraint(equalToConstant: 20.0),
-                                    genreLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-                                ])
-               
         
         let genreString = model.genreStringArray.joined(separator: ", ")
         genresLabel = UIViewController.createLabel(label: genresLabel, text: genreString , font:UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)),
@@ -176,33 +191,18 @@ class DetailViewController: UIViewController {
                                                   textAlignment: .center,
                                                   numberOfLines: 0,
                                                   lineBreakMode: .byWordWrapping)
-        self.view.addSubview(genresLabel)
-        genresLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            genresLabel.topAnchor.constraint(equalTo: genreLabel.bottomAnchor, constant:0),
-            genresLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-            genresLabel.heightAnchor.constraint(equalToConstant: 60.0),
-            genresLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-        ])
-        
+       genreStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
+       genreStack.addArrangedSubview(genreLabel)
+       genreStack.addArrangedSubview(genresLabel)
     }
     
-    func configureReleaseDateLabel() {
+    func configureReleaseDateStack() {
      
      let releaseLabel = UIViewController.createLabel(label: UILabel(), text: "Release Date:", font:UIFontMetrics(forTextStyle: .headline).scaledFont(for: UIFont.systemFont(ofSize: 20, weight: .heavy)),
      adjustFontSize: true,
      textAlignment: .center,
      numberOfLines: 0,
      lineBreakMode: .byWordWrapping)
-     self.view.addSubview(releaseLabel)
-     releaseLabel.translatesAutoresizingMaskIntoConstraints = false
-               NSLayoutConstraint.activate([
-                          releaseLabel.topAnchor.constraint(equalTo: genresLabel.bottomAnchor, constant:20),
-                          releaseLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-                          releaseLabel.heightAnchor.constraint(equalToConstant: 20.0),
-                          releaseLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-                      ])
-     
      
      let dateFormatter = DateFormatter()
      dateFormatter.dateFormat = "MMM d, yyyy"
@@ -212,15 +212,13 @@ class DetailViewController: UIViewController {
         textAlignment: .center,
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
-        self.view.addSubview(releaseDateLabel)
-        releaseDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-                   releaseDateLabel.topAnchor.constraint(equalTo: releaseLabel.bottomAnchor, constant:0),
-                   releaseDateLabel.widthAnchor.constraint(equalToConstant:self.view.frame.size.width * 0.90),
-                   releaseDateLabel.heightAnchor.constraint(equalToConstant: 40.0),
-                   releaseDateLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0)
-               ])
-        
+       
+        releaseDateStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
+        releaseDateStack.addArrangedSubview(releaseLabel)
+        releaseDateStack.addArrangedSubview(releaseDateLabel)
     }
     
+    func configureLinkButton() {
+        linkButton = UIViewController.createButton(button: linkButton, text: "iTunes", font: UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)), titleColor: .white, backgroundColor: .systemRed, borderWidth: 0, borderColor: .clear, cornerRadius: 5.0, textAlignment: .center)
+    }
 }

@@ -45,15 +45,7 @@ extension UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }
-    /*
-     copyrightLabel.text = model.copyright
-           copyrightLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular))
-           copyrightLabel.adjustsFontForContentSizeCategory = true
-           copyrightLabel.textAlignment = .center
-           copyrightLabel.numberOfLines = 0
-           copyrightLabel.lineBreakMode = .byWordWrapping
-           
-     */
+
     static func createLabel(label: UILabel, text: String, font: UIFont, adjustFontSize: Bool, textAlignment: NSTextAlignment, numberOfLines: Int, lineBreakMode: NSLineBreakMode) -> UILabel {
         
         label.text = text
@@ -65,5 +57,39 @@ extension UIViewController {
         label.sizeToFit()
         return label
     }
+    
+    static func createUIStackView( axis: NSLayoutConstraint.Axis, distribution: UIStackView.Distribution, alignment: UIStackView.Alignment, spacing: CGFloat ) -> UIStackView {
+           let sView = UIStackView()
+           sView.axis = axis
+           sView.distribution =  .equalSpacing
+           sView.alignment = alignment //UIStackView.Alignment.center
+           sView.spacing = spacing
+           sView.translatesAutoresizingMaskIntoConstraints = false
+           return sView
+       }
+    
+    static func createButton(button: UIButton, text: String, font: UIFont, titleColor: UIColor = .white, backgroundColor: UIColor = .clear, borderWidth: CGFloat = 0, borderColor: UIColor = .clear, cornerRadius: CGFloat = 5, textAlignment: NSTextAlignment) -> UIButton {
+           
+           button.setTitle(text, for: .normal)
+           button.titleLabel?.font = font
+           button.titleLabel?.numberOfLines = 0
+           button.titleLabel?.lineBreakMode = .byWordWrapping
+           button.titleLabel?.textAlignment = textAlignment
+           button.titleLabel?.adjustsFontSizeToFitWidth = true
+           NSLayoutConstraint.activate([
+        
+           ])
+           
+           button.setTitleColor(titleColor, for: .normal)
+           button.backgroundColor = backgroundColor
+           button.layer.borderWidth = borderWidth
+           button.layer.borderColor = borderColor.cgColor
+           button.layer.cornerRadius = cornerRadius
+           button.translatesAutoresizingMaskIntoConstraints = false
+           
+           return button
+       }
+    
+    
     
 }

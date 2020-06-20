@@ -12,14 +12,16 @@ import os.log
 extension UIImageView {
     
     func getImage(name: String)  {
-        let request = URL(string: name)
-        URLSession.shared.dataTask(with: request!, completionHandler:  { (data, response, error)  in
+        guard let request = URL(string: name) else { return }
+        URLSession.shared.dataTask(with: request, completionHandler:  { (data, response, error)  in
             if error != nil {
-                os_log("ERROR: %@", error!.localizedDescription)
+                guard let tError = error else { return }
+                os_log("ERROR: %@", tError.localizedDescription )
                 return
             }
             DispatchQueue.main.async(execute: {
-                let image = UIImage(data: data!)!
+                guard let tData = data else { return }
+                let image = UIImage(data: tData)
                 self.image = image
                 NotificationCenter.default.post(name: Notification.Name.ImageViewSetNotification, object: nil )
             })

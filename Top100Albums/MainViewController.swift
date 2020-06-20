@@ -95,8 +95,8 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     }
     
     @objc func updateTable(notification: Notification) {
-        albums = notification.object as! [AlbumModel]
-        
+        guard let tAlbums = notification.object as? [AlbumModel] else { return }
+        self.albums = tAlbums
         DispatchQueue.main.async {
             if self.albums.count == 0 {
                 guard let nManager = self.networkManager else { return }
