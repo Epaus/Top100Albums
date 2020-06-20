@@ -69,26 +69,25 @@ extension UIViewController {
        }
     
     static func createButton(button: UIButton, text: String, font: UIFont, titleColor: UIColor = .white, backgroundColor: UIColor = .clear, borderWidth: CGFloat = 0, borderColor: UIColor = .clear, cornerRadius: CGFloat = 5, textAlignment: NSTextAlignment) -> UIButton {
-           
-           button.setTitle(text, for: .normal)
-           button.titleLabel?.font = font
-           button.titleLabel?.numberOfLines = 0
-           button.titleLabel?.lineBreakMode = .byWordWrapping
-           button.titleLabel?.textAlignment = textAlignment
-           button.titleLabel?.adjustsFontSizeToFitWidth = true
-           NSLayoutConstraint.activate([
         
-           ])
-           
-           button.setTitleColor(titleColor, for: .normal)
-           button.backgroundColor = backgroundColor
-           button.layer.borderWidth = borderWidth
-           button.layer.borderColor = borderColor.cgColor
-           button.layer.cornerRadius = cornerRadius
-           button.translatesAutoresizingMaskIntoConstraints = false
-           
-           return button
-       }
+        button.setTitle(text, for: .normal)
+        button.titleLabel?.font = font
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.titleLabel?.textAlignment = textAlignment
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+       
+        
+        
+        button.setTitleColor(titleColor, for: .normal)
+        button.backgroundColor = backgroundColor
+        button.layer.borderWidth = borderWidth
+        button.layer.borderColor = borderColor.cgColor
+        button.layer.cornerRadius = cornerRadius
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }
     
     
     

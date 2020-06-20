@@ -70,7 +70,7 @@ class DetailViewController: UIViewController {
            var label = UILabel()
            return label
        }()
-    
+        
     lazy var linkButton: UIButton = {
         var button = UIButton()
         return button
@@ -131,12 +131,16 @@ class DetailViewController: UIViewController {
         configureReleaseDateStack()
         configureLinkButton()
         
+        
         stackView.addArrangedSubview(imageStack)
         stackView.addArrangedSubview(albumNameLabel)
         stackView.addArrangedSubview(artistStack)
         stackView.addArrangedSubview(genreStack)
         stackView.addArrangedSubview(releaseDateStack)
         stackView.addArrangedSubview(linkButton)
+        NSLayoutConstraint.activate([
+            linkButton.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -20)
+                   ])
     }
     
     func configureImageStack() {
@@ -219,6 +223,11 @@ class DetailViewController: UIViewController {
     }
     
     func configureLinkButton() {
-        linkButton = UIViewController.createButton(button: linkButton, text: "iTunes", font: UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)), titleColor: .white, backgroundColor: .systemRed, borderWidth: 0, borderColor: .clear, cornerRadius: 5.0, textAlignment: .center)
+       
+        let borderWidth: CGFloat = 0.0
+        let borderColor = UIColor.clear
+        let cornerRadius: CGFloat = 5
+        let backgroundColor =  UIColor.systemRed
+        linkButton = UIViewController.createButton(button: linkButton, text: "iTunes", font: UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)), titleColor: .white, backgroundColor: backgroundColor, borderWidth: borderWidth, borderColor: borderColor, cornerRadius: cornerRadius, textAlignment: .center)
     }
 }
