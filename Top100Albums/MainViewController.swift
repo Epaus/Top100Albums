@@ -42,11 +42,14 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .tertiarySystemBackground
-        activityIndicator.showActivityIndicator(uiView: self.view)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
         setupNavigationBar()
+        self.view.addSubview(activityIndicator)
+      
         setupTableView()
+        self.view.backgroundColor = .tertiarySystemBackground
+      
+       
     }
     
     func getData() {
@@ -54,11 +57,13 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
             self.networkManager = NetworkManager()
         }
         if let nManager = self.networkManager {
-            if nManager.models.count == 0 {
-                //activityIndicator.showActivityIndicator(uiView: self.view)
+            if nManager.models.count == 0 && nManager.running == false {
+                activityIndicator.showActivityIndicator(uiView: self.view)
+                print("running status1 = \(nManager.running)")
                 nManager.makeRequest {
+                    print("running status2 = \(nManager.running)")
                     DispatchQueue.main.async(execute: {
-                        print("in completion block")
+                        print("in completion block from MainViewController")
                         self.albums = nManager.models
                         self.tableView.reloadData()
                         self.activityIndicator.hideActivityIndicator()
@@ -82,7 +87,7 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:UIElementSizes.navBarHeight),
+            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:UIElementSizes.navBarHeight - 40),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
@@ -125,12 +130,12 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
         let model = albums[indexPath.row]
-        let acell: ListTableViewCell = {
-            return ListTableViewCell.init(style: .default, reuseIdentifier: ConstantText.cellId, model: model)
-        }()
+        let acell = ListTableViewCell.init(style: .subtitle, reuseIdentifier: ConstantText.cellId, model: model)
+        acell.textLabel?.text = model.name
+        acell.detailTextLabel?.text = model.artistName
         acell.thumbnailImageView.getImage(name: model.artworkUrl100 ?? "")
         
-        return acell 
+        return acell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

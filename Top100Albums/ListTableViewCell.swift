@@ -9,17 +9,12 @@
 import UIKit
 
 class ListTableViewCell: UITableViewCell {
-    
+
     lazy var thumbnailImageView : UIImageView = {
         var iView = UIImageView()
         return iView
     }()
-    var model: AlbumModel {
-        didSet {
-            self.textLabel?.text = model.name ?? ""
-            self.detailTextLabel?.text = model.artistName ?? ""
-        }
-    }
+    var model: AlbumModel
     
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, model: AlbumModel) {
         self.model = model
@@ -46,14 +41,35 @@ class ListTableViewCell: UITableViewCell {
     }
     
     override func layoutSubviews() {
+      
         self.addSubview(thumbnailImageView)
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        textLabel?.translatesAutoresizingMaskIntoConstraints = false
+        detailTextLabel?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 8),
-            thumbnailImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            thumbnailImageView.widthAnchor.constraint(equalToConstant: 80),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 80)
+           
+            thumbnailImageView.widthAnchor.constraint(equalToConstant: 90),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 90),
+            thumbnailImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            
         ])
+        guard let albumLabel = textLabel else { return }
+        albumLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        NSLayoutConstraint.activate([
+            albumLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
+            albumLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -15),
+            albumLabel.widthAnchor.constraint(equalToConstant: 300)
+        ])
+        
+        guard let artistNameLabel = detailTextLabel else { print("where is detailTextLabel?"); return }
+        artistNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        NSLayoutConstraint.activate([
+                   artistNameLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
+                   artistNameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 15),
+                   artistNameLabel.widthAnchor.constraint(equalToConstant: 300)
+               ])
+        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

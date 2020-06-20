@@ -35,7 +35,7 @@ enum QueryType {
    }
 
 class NetworkManager {
-    
+    var running: Bool = false
     var models:  [AlbumModel] = [] {
         didSet {
             print("models - didSet!")
@@ -43,7 +43,7 @@ class NetworkManager {
         }
     }
     static let shared = NetworkManager()
-    let theURL = "https://rss.itunes.apple.com/api/v1/us/itunes-music/top-albums/all/10/explicit.json" //"https://rss.itunes.apple.com/api/v1/us/apple-music"
+    let theURL = "https://rss.itunes.apple.com/api/v1/us/itunes-music/top-albums/all/100/explicit.json"
     var endpoint = "/top-albums/all/100/explicit.json"
     var type: QueryType { return .path }
     var timeoutInterval = 30.0
@@ -61,7 +61,7 @@ class NetworkManager {
         var headers = [String: String]()
         headers["Accept"] = "application/json"
         request.allHTTPHeaderFields = headers
-        
+        running = true
         URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             
                           if let jsonData = data {
