@@ -139,7 +139,10 @@ extension MainViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let model = albums[indexPath.row]
+        let vc = DetailViewController(model: model)
+       
+        self.present(vc, animated: true, completion: nil)
     }
 }
 
