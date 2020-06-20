@@ -45,5 +45,25 @@ extension UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }
+    /*
+     copyrightLabel.text = model.copyright
+           copyrightLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular))
+           copyrightLabel.adjustsFontForContentSizeCategory = true
+           copyrightLabel.textAlignment = .center
+           copyrightLabel.numberOfLines = 0
+           copyrightLabel.lineBreakMode = .byWordWrapping
+           
+     */
+    static func createLabel(label: UILabel, text: String, font: UIFont, adjustFontSize: Bool, textAlignment: NSTextAlignment, numberOfLines: Int, lineBreakMode: NSLineBreakMode) -> UILabel {
+        
+        label.text = text
+        label.font = font
+        label.adjustsFontSizeToFitWidth = adjustFontSize
+        label.textAlignment = textAlignment
+        label.numberOfLines = numberOfLines
+        label.lineBreakMode = lineBreakMode
+        label.sizeToFit()
+        return label
+    }
     
 }
