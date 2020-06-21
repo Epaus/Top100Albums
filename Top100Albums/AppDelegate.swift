@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var networkManager = NetworkManager()
+    var navigationController: UINavigationController?
    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -21,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         let mainController = MainViewController(frame:CGRect.zero, networkManager: networkManager)
        
-        let navigationController = UINavigationController.init(rootViewController: mainController)
+        navigationController = UINavigationController.init(rootViewController: mainController)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

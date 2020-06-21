@@ -18,8 +18,6 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         let view = UIActivityIndicatorView()
         return view
     }()
-    
-    var topbarHeight: CGFloat = 0
    
     var tableView: UITableView = {
         let tableView = UITableView.init(frame: CGRect.zero, style: .plain)
@@ -49,19 +47,12 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = .tertiarySystemBackground
          NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
-        
-        
-       // setupNavigationBar()
-       
-        self.topbarHeight = (self.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0.0) + 60
+        setupNavigationBar()
         setupTableView()
         configureActivityIndicator()
         activityIndicator.startAnimating()
-       
-      
-        self.view.backgroundColor = .tertiarySystemBackground
     }
     
 // MARK: - Update Table
@@ -104,9 +95,11 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
 // MARK: - Configure Views
     
     func setupNavigationBar() {
+        print(UIElementSizes.navBarHeight)
+        print(UIScreen.main.nativeBounds.height)
         let navigationBar = UINavigationBar(frame: CGRect(x:0, y:0, width:self.view.frame.size.width, height:UIElementSizes.navBarHeight))
         configureNavigationBar(largeTitleColor: .white, backgoundColor: .systemPink, tintColor: .blue, title: ConstantText.listTitle, preferredLargeTitle: true, navigationBar: navigationBar)
-        //self.view.addSubview(navigationBar)
+        self.view.addSubview(navigationBar)
         print(navigationBar.frame.height)
         
     }
@@ -119,8 +112,11 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let topAnchorConstant: CGFloat = UIScreen.main.nativeBounds.height < 1400 ? UIElementSizes.SE_tableTopAnchorConstant : UIElementSizes.larger_tableTopAnchorConstant
+        
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:self.topbarHeight),
+            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstant),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
@@ -197,11 +193,12 @@ extension MainViewController: UITableViewDelegate {
         let model = albums[indexPath.row]
         let vc = DetailViewController(model: model)
         if let navController = self.navigationController {
-            print("aha")
+            // This code does not get hit. The navigationController is null and I don't know why. If you see the problem, I would be so delighted to hear what it is.
+            navController.pushViewController(vc, animated: true)
         } else {
-            print("fuck you")
+            self.present(vc, animated: true, completion: nil)
         }
-        //self.present(vc, animated: true, completion: nil)
+        
        
         tableView.deselectRow(at: indexPath, animated: true)
     }
