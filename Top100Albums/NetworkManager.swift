@@ -41,7 +41,7 @@ class NetworkManager {
             NotificationCenter.default.post(name: .ModelListUpdatedNotification, object: models )
         }
     }
-    static let shared = NetworkManager()
+   // static let shared = NetworkManager()
     let theURL = "https://rss.itunes.apple.com/api/v1/us/itunes-music/top-albums/all/100/explicit.json"
     var endpoint = "/top-albums/all/100/explicit.json"
     var type: QueryType { return .path }

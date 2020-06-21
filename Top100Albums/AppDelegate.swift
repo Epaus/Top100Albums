@@ -13,13 +13,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var networkManager = NetworkManager()
-    var navigationController: UINavigationController?
+   
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
+       
         let mainController = MainViewController(frame:CGRect.zero, networkManager: networkManager)
-        navigationController = UINavigationController(rootViewController: mainController)
+       
+        let navigationController = UINavigationController.init(rootViewController: mainController)
+        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         

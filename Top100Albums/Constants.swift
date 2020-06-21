@@ -16,6 +16,7 @@ struct ConstantText {
 
 struct UIElementSizes {
     static var navBarHeight:CGFloat = 100.0
+   
     static var screenWidth: CGFloat = UIScreen.main.bounds.width
 }
 

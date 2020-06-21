@@ -11,10 +11,16 @@ import UIKit
 
 class MainViewController: UIViewController, UINavigationBarDelegate {
     var networkManager: NetworkManager?
+    
     var albums = [AlbumModel]()
     
-    var activityIndicator = ActivityIndicatorView()
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        return view
+    }()
     
+    var topbarHeight: CGFloat = 0
+   
     var tableView: UITableView = {
         let tableView = UITableView.init(frame: CGRect.zero, style: .plain)
         tableView.backgroundColor = .black
@@ -22,6 +28,7 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         return tableView
     }()
     
+// MARK: - Lifecycle
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
         super.init(nibName: nil, bundle: nil)
@@ -42,41 +49,66 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
          NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
-        setupNavigationBar()
-        self.view.addSubview(activityIndicator)
-      
-        setupTableView()
-        self.view.backgroundColor = .tertiarySystemBackground
-      
+        
+        
+       // setupNavigationBar()
        
+        self.topbarHeight = (self.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0.0) + 60
+        setupTableView()
+        configureActivityIndicator()
+        activityIndicator.startAnimating()
+       
+      
+        self.view.backgroundColor = .tertiarySystemBackground
     }
     
+// MARK: - Update Table
     func getData() {
         if networkManager == nil {
             self.networkManager = NetworkManager()
         }
         if let nManager = self.networkManager {
             if nManager.models.count == 0 && nManager.running == false {
-                activityIndicator.showActivityIndicator(uiView: self.view)
+               
                 print("running status1 = \(nManager.running)")
                 nManager.makeRequest {
                     print("running status2 = \(nManager.running)")
                     DispatchQueue.main.async(execute: {
                         print("in completion block from MainViewController")
                         self.albums = nManager.models
+                         //self.hideActivityIndicator()
                         self.tableView.reloadData()
-                        self.activityIndicator.hideActivityIndicator()
+                       
                     })
                 }
             }
         }
     }
     
+    @objc func updateTable(notification: Notification) {
+          //self.hideActivityIndicator()
+          guard let tAlbums = notification.object as? [AlbumModel] else { return }
+          self.albums = tAlbums
+          DispatchQueue.main.async {
+              if self.albums.count == 0 {
+                  guard let nManager = self.networkManager else { return }
+                  self.albums = nManager.models
+              }
+              self.tableView.reloadData()
+              self.hideActivityIndicator()
+          }
+      }
+    
+// MARK: - Configure Views
+    
     func setupNavigationBar() {
         let navigationBar = UINavigationBar(frame: CGRect(x:0, y:0, width:self.view.frame.size.width, height:UIElementSizes.navBarHeight))
         configureNavigationBar(largeTitleColor: .white, backgoundColor: .systemPink, tintColor: .blue, title: ConstantText.listTitle, preferredLargeTitle: true, navigationBar: navigationBar)
-        self.view.addSubview(navigationBar)
+        //self.view.addSubview(navigationBar)
+        print(navigationBar.frame.height)
+        
     }
     
     func setupTableView() {
@@ -84,33 +116,55 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         tableView.dataSource = self
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ConstantText.cellId)
         tableView.estimatedRowHeight = 100
+        tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:UIElementSizes.navBarHeight),
+            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:self.topbarHeight),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
     
-    @objc func updateTable(notification: Notification) {
-        guard let tAlbums = notification.object as? [AlbumModel] else { return }
-        self.albums = tAlbums
-        DispatchQueue.main.async {
-            if self.albums.count == 0 {
-                guard let nManager = self.networkManager else { return }
-                self.albums = nManager.models
-            }
-            self.tableView.reloadData()
-            self.activityIndicator.hideActivityIndicator()
-        }
+  
+    
+    func configureActivityIndicator() {
+
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = self.view.center
+        activityIndicator.color = .systemRed
+        self.view.addSubview(activityIndicator)
+                  
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+
+                   activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+                   activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+               ])
+        
     }
     
+    // MARK: - Activity Indicator
+           func start() {
+     
+               DispatchQueue.main.async {
+                   self.activityIndicator.startAnimating()
+               }
+           }
+               
+           func hideActivityIndicator() {
+                   DispatchQueue.main.async {
+                       
+                       self.activityIndicator.stopAnimating()
+                   }
+               }
+
+    
 }
-// MARK: UITableviewDataSource, UITableViewDelegate extension
+
+// MARK: - TableViewDataSource functions
 extension MainViewController: UITableViewDataSource {
-    // MARK: - TableViewDataSource functions
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -121,6 +175,7 @@ extension MainViewController: UITableViewDataSource {
     
 
 }
+// MARK: - TableViewDelegate functions
 extension MainViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -141,8 +196,18 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let model = albums[indexPath.row]
         let vc = DetailViewController(model: model)
+        if let navController = self.navigationController {
+            print("aha")
+        } else {
+            print("fuck you")
+        }
+        //self.present(vc, animated: true, completion: nil)
        
-        self.present(vc, animated: true, completion: nil)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return section == 0 ? 0 : 32
     }
 }
 

@@ -8,6 +8,8 @@
 import UIKit
 
 extension UIViewController {
+    
+// MARK: - Create UIElements
     func configureNavigationBar(largeTitleColor: UIColor, backgoundColor: UIColor, tintColor: UIColor, title: String, preferredLargeTitle: Bool, navigationBar: UINavigationBar) {
         if #available(iOS 13.0, *) {
             let navBarAppearance = UINavigationBarAppearance()
@@ -77,8 +79,6 @@ extension UIViewController {
         button.titleLabel?.textAlignment = textAlignment
         button.titleLabel?.adjustsFontSizeToFitWidth = true
        
-        
-        
         button.setTitleColor(titleColor, for: .normal)
         button.backgroundColor = backgroundColor
         button.layer.borderWidth = borderWidth
@@ -89,6 +89,17 @@ extension UIViewController {
         return button
     }
     
+    static func createBlurViewWithActivityIndicator( blurView: inout UIView, centerView: CGPoint ) -> UIView {
     
+        let blurEffect = UIBlurEffect(style: .prominent)
+        blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = .zero
+        blurView.isUserInteractionEnabled = false
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+      
+        return blurView
+    }
+    
+  
     
 }

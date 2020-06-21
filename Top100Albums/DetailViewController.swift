@@ -81,8 +81,15 @@ class DetailViewController: UIViewController {
         return view
     }()
     
-    var model: AlbumModel
+    lazy var buttonStack: UIStackView = {
+        var stack = UIStackView()
+        return stack
+    }()
     
+    var model: AlbumModel
+
+
+// MARK: - Lifecycle
     init(model: AlbumModel) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
@@ -106,6 +113,7 @@ class DetailViewController: UIViewController {
         configureScrollView()
     }
     
+// MARK: - Configure views
     func configureScrollView() {
         self.view.addSubview(scrollView)
         
@@ -131,26 +139,25 @@ class DetailViewController: UIViewController {
     }
     
     func configureStackView() {
-        self.stackView = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
+        self.stackView = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 30)
         configureImageStack()
         configureAlbumNameLabel()
         configureArtistStack()
         configureGenreStack()
         configureReleaseDateStack()
         configureLinkButton()
-        configureBufferView()
-        
         
         stackView.addArrangedSubview(imageStack)
         stackView.addArrangedSubview(albumNameLabel)
         stackView.addArrangedSubview(artistStack)
         stackView.addArrangedSubview(genreStack)
         stackView.addArrangedSubview(releaseDateStack)
-        stackView.addArrangedSubview(linkButton)
-        stackView.addArrangedSubview(bufferView)
+        stackView.addArrangedSubview(buttonStack)
+       
         NSLayoutConstraint.activate([
-            linkButton.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -20),
             imageStack.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -10),
+            buttonStack.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -20),
+            buttonStack.bottomAnchor.constraint(equalTo: stackView.bottomAnchor)
                    ])
     }
     
@@ -193,7 +200,7 @@ class DetailViewController: UIViewController {
            numberOfLines: 0,
            lineBreakMode: .byWordWrapping)
 
-        artistStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
+        artistStack = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 30)
         artistStack.addArrangedSubview(artistLabel)
         artistStack.addArrangedSubview(artistNameLabel)
        }
@@ -211,7 +218,7 @@ class DetailViewController: UIViewController {
                                                   textAlignment: .center,
                                                   numberOfLines: 0,
                                                   lineBreakMode: .byWordWrapping)
-       genreStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
+        genreStack = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 30)
        genreStack.addArrangedSubview(genreLabel)
        genreStack.addArrangedSubview(genresLabel)
     }
@@ -233,7 +240,7 @@ class DetailViewController: UIViewController {
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
        
-        releaseDateStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 30)
+        releaseDateStack = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 30)
         releaseDateStack.addArrangedSubview(releaseLabel)
         releaseDateStack.addArrangedSubview(releaseDateLabel)
     }
@@ -245,11 +252,35 @@ class DetailViewController: UIViewController {
         let cornerRadius: CGFloat = 5
         let backgroundColor =  UIColor.systemRed
         linkButton = UIViewController.createButton(button: linkButton, text: "iTunes", font: UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)), titleColor: .white, backgroundColor: backgroundColor, borderWidth: borderWidth, borderColor: borderColor, cornerRadius: cornerRadius, textAlignment: .center)
-    }
-    
-    func configureBufferView() {
+        linkButton.addTarget(self, action: #selector(openLink), for: UIControl.Event.touchUpInside)
         bufferView = UIView()
         bufferView.backgroundColor = .clear
+        
+       
+        
+        buttonStack = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 0)
+        buttonStack.addArrangedSubview(linkButton)
+        buttonStack.addArrangedSubview(bufferView)
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        linkButton.translatesAutoresizingMaskIntoConstraints = false
         bufferView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        NSLayoutConstraint.activate([
+            bufferView.heightAnchor.constraint(equalToConstant: 20),
+            bufferView.bottomAnchor.constraint(equalTo:buttonStack.bottomAnchor),
+            linkButton.widthAnchor.constraint(equalTo:buttonStack.widthAnchor)
+        ])
+        
+        
     }
+ // MARK: - Button Action
+    @objc func openLink() {
+        guard let linkString = model.url else { return }
+        print(linkString)
+        if let url = URL(string: linkString) {
+            UIApplication.shared.open(url, options: [:])
+        }
+    }
+    
 }

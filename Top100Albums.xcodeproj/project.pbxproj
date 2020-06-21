@@ -20,7 +20,6 @@
 		CEE7041A249C397E00628F69 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70419249C397E00628F69 /* Constants.swift */; };
 		CEE7041D249C3EB900628F69 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7041C249C3EB900628F69 /* UIImageView.swift */; };
 		CEE7041F249C3EFB00628F69 /* Notification-Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7041E249C3EFB00628F69 /* Notification-Name.swift */; };
-		CEE70422249C443800628F69 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70421249C443800628F69 /* ActivityIndicatorView.swift */; };
 		CEE70424249D3AFD00628F69 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70423249D3AFD00628F69 /* UIViewController.swift */; };
 		CEE70426249D5B4800628F69 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70425249D5B4800628F69 /* ListTableViewCell.swift */; };
 		CEE7042C249D949400628F69 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE7042B249D949400628F69 /* DetailViewController.swift */; };
@@ -63,7 +62,6 @@
 		CEE70419249C397E00628F69 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		CEE7041C249C3EB900628F69 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		CEE7041E249C3EFB00628F69 /* Notification-Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification-Name.swift"; sourceTree = "<group>"; };
-		CEE70421249C443800628F69 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		CEE70423249D3AFD00628F69 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		CEE70425249D5B4800628F69 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		CEE7042B249D949400628F69 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -205,7 +203,6 @@
 		CEE70420249C441900628F69 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				CEE70421249C443800628F69 /* ActivityIndicatorView.swift */,
 				CEE70425249D5B4800628F69 /* ListTableViewCell.swift */,
 			);
 			name = Views;
@@ -351,7 +348,6 @@
 				CEE70424249D3AFD00628F69 /* UIViewController.swift in Sources */,
 				CEE703DD249C03DF00628F69 /* SceneDelegate.swift in Sources */,
 				CEE7040E249C045200628F69 /* MainViewController.swift in Sources */,
-				CEE70422249C443800628F69 /* ActivityIndicatorView.swift in Sources */,
 				CEE7041A249C397E00628F69 /* Constants.swift in Sources */,
 				CEE7041F249C3EFB00628F69 /* Notification-Name.swift in Sources */,
 			);
