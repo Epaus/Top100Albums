@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		CEE703DB249C03DF00628F69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE703DA249C03DF00628F69 /* AppDelegate.swift */; };
-		CEE703DD249C03DF00628F69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE703DC249C03DF00628F69 /* SceneDelegate.swift */; };
 		CEE703E2249C03DF00628F69 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE703E0249C03DF00628F69 /* Main.storyboard */; };
 		CEE703E4249C03E200628F69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEE703E3249C03E200628F69 /* Assets.xcassets */; };
 		CEE703E7249C03E200628F69 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE703E5249C03E200628F69 /* LaunchScreen.storyboard */; };
@@ -45,7 +44,6 @@
 /* Begin PBXFileReference section */
 		CEE703D7249C03DF00628F69 /* Top100Albums.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Top100Albums.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE703DA249C03DF00628F69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CEE703DC249C03DF00628F69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CEE703E1249C03DF00628F69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CEE703E3249C03E200628F69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CEE703E6249C03E200628F69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 			isa = PBXGroup;
 			children = (
 				CEE703DA249C03DF00628F69 /* AppDelegate.swift */,
-				CEE703DC249C03DF00628F69 /* SceneDelegate.swift */,
 				CEE703E0249C03DF00628F69 /* Main.storyboard */,
 				CEE703E3249C03E200628F69 /* Assets.xcassets */,
 				CEE703E5249C03E200628F69 /* LaunchScreen.storyboard */,
@@ -346,7 +343,6 @@
 				CEE7041D249C3EB900628F69 /* UIImageView.swift in Sources */,
 				CEE703DB249C03DF00628F69 /* AppDelegate.swift in Sources */,
 				CEE70424249D3AFD00628F69 /* UIViewController.swift in Sources */,
-				CEE703DD249C03DF00628F69 /* SceneDelegate.swift in Sources */,
 				CEE7040E249C045200628F69 /* MainViewController.swift in Sources */,
 				CEE7041A249C397E00628F69 /* Constants.swift in Sources */,
 				CEE7041F249C3EFB00628F69 /* Notification-Name.swift in Sources */,
