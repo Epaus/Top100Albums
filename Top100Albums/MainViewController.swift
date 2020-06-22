@@ -66,14 +66,10 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         }
         if let nManager = self.networkManager {
             if nManager.models.count == 0 && nManager.running == false {
-               
-                print("running status1 = \(nManager.running)")
                 nManager.makeRequest {
-                    print("running status2 = \(nManager.running)")
                     DispatchQueue.main.async(execute: {
-                        print("in completion block from MainViewController")
+                        print("in completion block from MainViewController:getData")
                         self.albums = nManager.models
-                         //self.hideActivityIndicator()
                         self.tableView.reloadData()
                        
                     })
@@ -83,7 +79,7 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     }
     
     @objc func updateTable(notification: Notification) {
-          //self.hideActivityIndicator()
+          print("updateTable")
           guard let tAlbums = notification.object as? [AlbumModel] else { return }
           self.albums = tAlbums
           DispatchQueue.main.async {
