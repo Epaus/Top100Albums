@@ -23,6 +23,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainController = MainViewController(frame:CGRect.zero, networkManager: networkManager)
        
         navigationController = UINavigationController.init(rootViewController: mainController)
+        
+        if #available(iOS 13.0, *) {
+                   navigationController?.navigationBar.prefersLargeTitles = true
+                   let navBarAppearance = UINavigationBarAppearance()
+                   navBarAppearance.configureWithOpaqueBackground()
+                   navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                   navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+                   navBarAppearance.backgroundColor = .systemRed
+                   navigationController?.navigationBar.standardAppearance = navBarAppearance
+                   navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+               }
+        
+        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         

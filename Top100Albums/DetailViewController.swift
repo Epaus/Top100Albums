@@ -107,7 +107,9 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.black
+        self.navigationController?.navigationBar.barTintColor = .systemRed
         self.view.backgroundColor = UIColor.systemGray6
         configureStackView()
         configureScrollView()
