@@ -29,11 +29,6 @@ enum Method: String {
     case get, post, put, delete
 }
 
-enum QueryType {
-       case body
-       case path
-   }
-
 class NetworkManager {
     var running: Bool = false
     var models:  [AlbumModel] = [] {
@@ -41,16 +36,11 @@ class NetworkManager {
             NotificationCenter.default.post(name: .ModelListUpdatedNotification, object: models )
         }
     }
-   // static let shared = NetworkManager()
+
     let theURL = "https://rss.itunes.apple.com/api/v1/us/itunes-music/top-albums/all/100/explicit.json"
-    var endpoint = "/top-albums/all/100/explicit.json"
-    var type: QueryType { return .path }
     var timeoutInterval = 30.0
-    
     var method: Method { return .get }
     private var task: URLSessionDataTask?
-    var searchParameter = String()
-    var prevSearchParameter = String()
     
     func makeRequest(completion: ()->Void) {
         
@@ -62,9 +52,9 @@ class NetworkManager {
         running = true
         URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             
-                          if let jsonData = data {
-             if error != nil {
-                 print(error.debugDescription)
+            if let jsonData = data {
+                if error != nil {
+                    os_log("URLSession error %@",error.debugDescription)
                  return
              }
              

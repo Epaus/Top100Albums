@@ -9,9 +9,10 @@
 import UIKit
 
 class ListTableViewCell: UITableViewCell {
-
+    
     lazy var thumbnailImageView : UIImageView = {
         var iView = UIImageView()
+        iView.accessibilityIdentifier = "thumbnailCell"
         return iView
     }()
     var model: AlbumModel
@@ -24,12 +25,12 @@ class ListTableViewCell: UITableViewCell {
     init(frame: CGRect, model: AlbumModel) {
         self.model = model
         super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: ConstantText.cellId)
-       }
-       
-       required init?(coder: NSCoder, model: AlbumModel) {
+    }
+    
+    required init?(coder: NSCoder, model: AlbumModel) {
         self.model = model
-           super.init(coder: coder)
-       }
+        super.init(coder: coder)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -45,7 +46,9 @@ class ListTableViewCell: UITableViewCell {
         self.addSubview(thumbnailImageView)
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         textLabel?.translatesAutoresizingMaskIntoConstraints = false
+        textLabel?.accessibilityIdentifier = "albumNameCell"
         detailTextLabel?.translatesAutoresizingMaskIntoConstraints = false
+        detailTextLabel?.accessibilityIdentifier = "artistNameCell"
         NSLayoutConstraint.activate([
             thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 8),
             
@@ -54,13 +57,13 @@ class ListTableViewCell: UITableViewCell {
             thumbnailImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
             
         ])
-       
+        
         guard let albumLabel = textLabel else { return }
         albumLabel.font = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 16, weight: .bold))
         albumLabel.adjustsFontSizeToFitWidth = true
         albumLabel.lineBreakMode = .byWordWrapping
         albumLabel.numberOfLines = 0
-    
+        
         
         NSLayoutConstraint.activate([
             albumLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),

@@ -102,6 +102,8 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ConstantText.cellId)
+        tableView.isAccessibilityElement = true
+        tableView.accessibilityIdentifier = "listTableView" // You can use any unique string
         tableView.estimatedRowHeight = 100
         tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
         self.view.addSubview(tableView)

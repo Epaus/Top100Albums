@@ -122,8 +122,8 @@ class DetailViewController: UIViewController {
         scrollView.bounces = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-                   scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: UIElementSizes.navBarHeight/2),
-                   scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 20),
+                   scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
+                   scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
                    
                    scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: -20),
                    scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 20)
@@ -172,6 +172,7 @@ class DetailViewController: UIViewController {
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
         copyrightLabel.translatesAutoresizingMaskIntoConstraints = false
+        copyrightLabel.accessibilityIdentifier = "copyright"
         imageStack = UIViewController.createUIStackView(axis: .vertical, distribution: .equalCentering, alignment: .center, spacing: 10)
         imageStack.addArrangedSubview(imageView)
         imageStack.addArrangedSubview(copyrightLabel)
@@ -187,6 +188,7 @@ class DetailViewController: UIViewController {
         textAlignment: .center,
         numberOfLines: 0,
         lineBreakMode: .byWordWrapping)
+        albumNameLabel.accessibilityIdentifier = "albumName"
     }
     
     func configureArtistStack() {
@@ -201,6 +203,7 @@ class DetailViewController: UIViewController {
            textAlignment: .center,
            numberOfLines: 0,
            lineBreakMode: .byWordWrapping)
+        artistNameLabel.accessibilityIdentifier = "artistName"
 
         artistStack = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 30)
         artistStack.addArrangedSubview(artistLabel)
@@ -220,28 +223,30 @@ class DetailViewController: UIViewController {
                                                   textAlignment: .center,
                                                   numberOfLines: 0,
                                                   lineBreakMode: .byWordWrapping)
+        genresLabel.accessibilityIdentifier = "genres"
         genreStack = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 30)
        genreStack.addArrangedSubview(genreLabel)
        genreStack.addArrangedSubview(genresLabel)
     }
     
     func configureReleaseDateStack() {
-     
-     let releaseLabel = UIViewController.createLabel(label: UILabel(), text: "Release Date:", font:UIFontMetrics(forTextStyle: .headline).scaledFont(for: UIFont.systemFont(ofSize: 20, weight: .heavy)),
-     adjustFontSize: true,
-     textAlignment: .center,
-     numberOfLines: 0,
-     lineBreakMode: .byWordWrapping)
-     
-     let dateFormatter = DateFormatter()
-     dateFormatter.dateFormat = "MMM d, yyyy"
-     let releaseDateString = dateFormatter.string(from: model.releaseDate ?? Date())
-     releaseDateLabel = UIViewController.createLabel(label: releaseDateLabel, text: releaseDateString, font:UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)),
-        adjustFontSize: true,
-        textAlignment: .center,
-        numberOfLines: 0,
-        lineBreakMode: .byWordWrapping)
-       
+        
+        let releaseLabel = UIViewController.createLabel(label: UILabel(), text: "Release Date:", font:UIFontMetrics(forTextStyle: .headline).scaledFont(for: UIFont.systemFont(ofSize: 20, weight: .heavy)),
+                                                        adjustFontSize: true,
+                                                        textAlignment: .center,
+                                                        numberOfLines: 0,
+                                                        lineBreakMode: .byWordWrapping)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        let releaseDateString = dateFormatter.string(from: model.releaseDate ?? Date())
+        releaseDateLabel = UIViewController.createLabel(label: releaseDateLabel, text: releaseDateString, font:UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)),
+                                                        adjustFontSize: true,
+                                                        textAlignment: .center,
+                                                        numberOfLines: 0,
+                                                        lineBreakMode: .byWordWrapping)
+        releaseLabel.accessibilityIdentifier = "releaseDate"
+        
         releaseDateStack = UIViewController.createUIStackView(axis: .vertical, distribution: .fillProportionally, alignment: .center, spacing: 30)
         releaseDateStack.addArrangedSubview(releaseLabel)
         releaseDateStack.addArrangedSubview(releaseDateLabel)
@@ -255,6 +260,7 @@ class DetailViewController: UIViewController {
         let backgroundColor =  UIColor.systemRed
         linkButton = UIViewController.createButton(button: linkButton, text: "iTunes", font: UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)), titleColor: .white, backgroundColor: backgroundColor, borderWidth: borderWidth, borderColor: borderColor, cornerRadius: cornerRadius, textAlignment: .center)
         linkButton.addTarget(self, action: #selector(openLink), for: UIControl.Event.touchUpInside)
+        linkButton.accessibilityIdentifier = "linkButton"
         bufferView = UIView()
         bufferView.backgroundColor = .clear
         
