@@ -10,7 +10,7 @@ import UIKit
 import os.log
 
 extension UIImageView {
-    
+
     func getImage(name: String)  {
         guard let request = URL(string: name) else { return }
         URLSession.shared.dataTask(with: request, completionHandler:  { (data, response, error)  in
@@ -23,7 +23,6 @@ extension UIImageView {
                 guard let tData = data else { return }
                 let image = UIImage(data: tData)
                 self.image = image
-                NotificationCenter.default.post(name: Notification.Name.ImageViewSetNotification, object: nil )
             })
         }).resume()
     }

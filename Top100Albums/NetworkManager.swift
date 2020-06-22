@@ -30,26 +30,19 @@ enum Method: String {
 }
 
 class NetworkManager {
-    var running: Bool = false
-    var models:  [AlbumModel] = [] {
-        didSet {
-            NotificationCenter.default.post(name: .ModelListUpdatedNotification, object: models )
-        }
-    }
-
     let theURL = "https://rss.itunes.apple.com/api/v1/us/itunes-music/top-albums/all/100/explicit.json"
     var timeoutInterval = 30.0
     var method: Method { return .get }
     private var task: URLSessionDataTask?
     
-    func makeRequest(completion: ()->Void) {
-        
+    func makeRequest(completion:  @escaping (_ list: [AlbumModel])->Void) {
+        var models = [AlbumModel]()
         guard let url = URL(string: theURL) else { return }
         var request = URLRequest(url: url)
         var headers = [String: String]()
         headers["Accept"] = "application/json"
         request.allHTTPHeaderFields = headers
-        running = true
+      
         URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             
             if let jsonData = data {
@@ -58,10 +51,11 @@ class NetworkManager {
                  return
              }
              
-             self.models = self.parseResponse(data: jsonData) ?? self.models
+             models = self.parseResponse(data: jsonData) ?? models
+             completion(models)
             }
         }).resume()
-        completion()
+        
     }
 
     func parseResponse(data: Data) -> [AlbumModel]? {

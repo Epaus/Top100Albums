@@ -11,7 +11,6 @@ import UIKit
 
 class MainViewController: UIViewController, UINavigationBarDelegate {
     var networkManager: NetworkManager?
-    
     var albums = [AlbumModel]()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
@@ -20,7 +19,7 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     }()
     
     var topbarHeight: CGFloat = 0
-   
+    
     var tableView: UITableView = {
         let tableView = UITableView.init(frame: CGRect.zero, style: .plain)
         tableView.backgroundColor = .black
@@ -28,7 +27,7 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         return tableView
     }()
     
-// MARK: - Lifecycle
+    // MARK: - Lifecycle
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
         super.init(nibName: nil, bundle: nil)
@@ -50,8 +49,7 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .tertiarySystemBackground
-         NotificationCenter.default.addObserver(self, selector: #selector(updateTable), name:.ModelListUpdatedNotification, object: nil)
-         self.topbarHeight = (self.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0.0)
+        self.topbarHeight = (self.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0.0)
         
         setupNavigationBar()
         setupTableView()
@@ -59,40 +57,25 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         activityIndicator.startAnimating()
     }
     
-// MARK: - Update Table
+    // MARK: - Update Table
     func getData() {
         if networkManager == nil {
             self.networkManager = NetworkManager()
         }
         if let nManager = self.networkManager {
-            if nManager.models.count == 0 && nManager.running == false {
-                nManager.makeRequest {
+            if albums.count == 0  {
+                nManager.makeRequest {results in
                     DispatchQueue.main.async(execute: {
-                        print("in completion block from MainViewController:getData")
-                        self.albums = nManager.models
+                        self.albums = results
+                        self.hideActivityIndicator()
                         self.tableView.reloadData()
-                       
                     })
                 }
             }
         }
     }
     
-    @objc func updateTable(notification: Notification) {
-          print("updateTable")
-          guard let tAlbums = notification.object as? [AlbumModel] else { return }
-          self.albums = tAlbums
-          DispatchQueue.main.async {
-              if self.albums.count == 0 {
-                  guard let nManager = self.networkManager else { return }
-                  self.albums = nManager.models
-              }
-              self.tableView.reloadData()
-              self.hideActivityIndicator()
-          }
-      }
-    
-// MARK: - Configure Views
+    // MARK: - Configure Views
     
     func setupNavigationBar() {
         navigationItem.title = ConstantText.listTitle
@@ -109,7 +92,6 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
-        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: topbarHeight),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
@@ -118,40 +100,37 @@ class MainViewController: UIViewController, UINavigationBarDelegate {
         ])
     }
     
-  
+    
     
     func configureActivityIndicator() {
-
         activityIndicator = UIActivityIndicatorView(style: .large)
         activityIndicator.center = self.view.center
         activityIndicator.color = .systemRed
         self.view.addSubview(activityIndicator)
-                  
+        
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-
-                   activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-                   activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-               ])
+            
+            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        ])
         
     }
     
     // MARK: - Activity Indicator
-           func start() {
-     
-               DispatchQueue.main.async {
-                   self.activityIndicator.startAnimating()
-               }
-           }
-               
-           func hideActivityIndicator() {
-                   DispatchQueue.main.async {
-                       
-                       self.activityIndicator.stopAnimating()
-                   }
-               }
-
+    func start() {
+        
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+    }
     
+    func hideActivityIndicator() {
+        DispatchQueue.main.async {
+            
+            self.activityIndicator.stopAnimating()
+        }
+    }
 }
 
 // MARK: - TableViewDataSource functions
