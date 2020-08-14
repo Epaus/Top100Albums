@@ -217,7 +217,8 @@ class DetailViewController: UIViewController {
                numberOfLines: 0,
                lineBreakMode: .byWordWrapping)
         
-        let genreString = model.genreStringArray.joined(separator: ", ")
+        let genreString = model.genres?.compactMap { $0.name }.joined(separator: ", ") ?? " "
+        
         genresLabel = UIViewController.createLabel(label: genresLabel, text: genreString , font:UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: UIFont.systemFont(ofSize: 18, weight: .regular)),
                                                   adjustFontSize: true,
                                                   textAlignment: .center,

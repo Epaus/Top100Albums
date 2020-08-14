@@ -55,44 +55,18 @@ class NetworkManager {
              completion(models)
             }
         }).resume()
-        
     }
 
     func parseResponse(data: Data) -> [AlbumModel]? {
-        var jsonResponse:Any
-        var albumArray = [AlbumModel]()
+
         do {
-            jsonResponse = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.init(rawValue: 0))
-            let response = jsonResponse as? [String: Any]
+            let albumResponse = try AlbumResponse.decode(data: data)
+            return albumResponse.feed.results
             
-            let feed = response?["feed"] as? [String : Any]
-            guard let results = feed?["results"] as? [[String : Any]] else { return albumArray }
-            
-            for element in results {
-                let artistName:String = element["artistName"] as? String ?? ""
-                let artistId = element["artistId"] as? String ?? ""
-                let rDate = element["releaseDate"] as? String ?? ""
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "YYYY-mm-dd"
-                let releaseDate = dateFormatter.date(from: rDate)
-                let name = element["name"] as? String ?? ""
-                let artworkUrl100 = element["artworkUrl100"] as? String ?? ""
-                let copyright = element["copyright"] as? String ?? ""
-                let url = element["url"] as? String ?? ""
-                let genres = element["genres"]  as? [[String : Any]] ?? []
-                var genreArray = [String]()
-                for genre in genres {
-                    let genreName:String = genre["name"]  as? String ?? ""
-                    if genreName != "Music" {
-                        genreArray.append(genreName)
-                    }
-                }
-                let album = AlbumModel.init(artistName: artistName , id: artistId, releaseDate: releaseDate, name: name, url: url, genre: nil, genreStringArray: genreArray, copyright: copyright, artworkUrl100: artworkUrl100)
-                albumArray.append(album)
-            }
         } catch {
-            os_log("JSONSerialization error %@",error.localizedDescription)
+            print("JSONDecoder error \(error)")
         }
-        return albumArray
+        
+        return nil
     }
 }
