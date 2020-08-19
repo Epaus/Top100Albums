@@ -158,7 +158,7 @@ extension MainViewController: UITableViewDelegate {
         let acell = ListTableViewCell.init(style: .subtitle, reuseIdentifier: ConstantText.cellId, model: model)
         acell.textLabel?.text = model.name
         acell.detailTextLabel?.text = model.artistName
-        acell.thumbnailImageView.getImage(name: model.artworkUrl100 ?? "")
+        acell.thumbnailImageView.downloadImage(withUrlString: model.artworkUrl100 ?? "")
         
         return acell
     }

@@ -9,21 +9,31 @@
 import UIKit
 import os.log
 
+var imageCache: NSCache<AnyObject, AnyObject> = NSCache()
+
 extension UIImageView {
 
-    func getImage(name: String)  {
-        guard let request = URL(string: name) else { return }
-        URLSession.shared.dataTask(with: request, completionHandler:  { (data, response, error)  in
+    func downloadImage(withUrlString urlString: String) {
+       
+        let url = URL(string: urlString)!
+        
+        if let imageFromCache = imageCache.object(forKey: url.absoluteString as AnyObject) as? UIImage {
+            self.image = imageFromCache
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+            
             if error != nil {
-                guard let tError = error else { return }
-                os_log("ERROR: %@", tError.localizedDescription )
+                debugPrint(String(describing: error?.localizedDescription))
                 return
             }
-            DispatchQueue.main.async(execute: {
-                guard let tData = data else { return }
-                let image = UIImage(data: tData)
-                self.image = image
-            })
+            
+            DispatchQueue.main.async {
+                let imageToCache = UIImage(data: data!)
+                self.image = imageToCache
+                imageCache.setObject(imageToCache!, forKey: url.absoluteString as AnyObject)
+            }
         }).resume()
     }
 }

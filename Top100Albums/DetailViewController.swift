@@ -164,7 +164,7 @@ class DetailViewController: UIViewController {
     }
     
     func configureImageStack() {
-        imageView.getImage(name: model.artworkUrl100 ?? "")
+        imageView.downloadImage(withUrlString: model.artworkUrl100 ?? "")
         copyrightLabel = UIViewController.createLabel(label: copyrightLabel, text: model.copyright ?? "",
         font:  UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 17, weight: .regular)),
         adjustFontSize: true,
