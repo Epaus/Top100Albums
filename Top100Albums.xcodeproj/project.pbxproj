@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE4A231024EDEA6500F0C0D5 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A230F24EDEA6500F0C0D5 /* JSONDecoder.swift */; };
+		CE4A231224EDEAA500F0C0D5 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A231124EDEAA500F0C0D5 /* DateFormatter.swift */; };
 		CE8F1AE224A12CA600E5D6C9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE70419249C397E00628F69 /* Constants.swift */; };
 		CE9696AA24A03FBD006D2CBF /* AlbumModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9696A924A03FBD006D2CBF /* AlbumModelTests.swift */; };
 		CE9696AC24A04210006D2CBF /* NetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9696AB24A04210006D2CBF /* NetworkManagerTests.swift */; };
@@ -48,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CE4A230F24EDEA6500F0C0D5 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
+		CE4A231124EDEAA500F0C0D5 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		CE9696A924A03FBD006D2CBF /* AlbumModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumModelTests.swift; sourceTree = "<group>"; };
 		CE9696AB24A04210006D2CBF /* NetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerTests.swift; sourceTree = "<group>"; };
 		CE9696AD24A04996006D2CBF /* response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = response.json; sourceTree = "<group>"; };
@@ -205,6 +209,8 @@
 			children = (
 				CEE7041C249C3EB900628F69 /* UIImageView.swift */,
 				CEE70423249D3AFD00628F69 /* UIViewController.swift */,
+				CE4A230F24EDEA6500F0C0D5 /* JSONDecoder.swift */,
+				CE4A231124EDEAA500F0C0D5 /* DateFormatter.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -354,8 +360,10 @@
 			files = (
 				CEE70426249D5B4800628F69 /* ListTableViewCell.swift in Sources */,
 				CEE7040F249C045200628F69 /* AlbumModel.swift in Sources */,
+				CE4A231024EDEA6500F0C0D5 /* JSONDecoder.swift in Sources */,
 				CEE70411249C045200628F69 /* NetworkManager.swift in Sources */,
 				CEE7042C249D949400628F69 /* DetailViewController.swift in Sources */,
+				CE4A231224EDEAA500F0C0D5 /* DateFormatter.swift in Sources */,
 				CEE7041D249C3EB900628F69 /* UIImageView.swift in Sources */,
 				CEE703DB249C03DF00628F69 /* AppDelegate.swift in Sources */,
 				CEE70424249D3AFD00628F69 /* UIViewController.swift in Sources */,

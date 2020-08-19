@@ -15,7 +15,9 @@ struct AlbumResponse: Codable {
         let decoder = JSONDecoder()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-mm-dd"
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        decoder.dateDecodingStrategyFormatters = [ DateFormatter.yearMonthDay,
+        DateFormatter.yearMonth,
+        DateFormatter.justYear ]
         
         return try decoder.decode(AlbumResponse.self, from: data)
     }
